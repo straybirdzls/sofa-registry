@@ -98,22 +98,4 @@ public class SessionNodeManager extends AbstractNodeManager<SessionNode> {
         }
     }
 
-    @Override
-    public void updateNodes(NodeChangeResult nodeChangeResult) {
-        write.lock();
-        try {
-            Long receiveVersion = nodeChangeResult.getVersion();
-            boolean versionChange = checkAndUpdateListVersions(
-                sessionServerConfig.getSessionServerDataCenter(), receiveVersion);
-            if (!versionChange) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Current data type {} list version has not updated!",
-                        getNodeType());
-                }
-            }
-            nodes = nodeChangeResult.getNodes();
-        } finally {
-            write.unlock();
-        }
-    }
 }

@@ -96,12 +96,19 @@ public abstract class AbstractNodeManager<T extends Node> implements NodeManager
     }
 
     @Override
-    public void updateNodes(NodeChangeResult nodeChangeResult) {
+    public boolean updateNodes(NodeChangeResult nodeChangeResult) {
         write.lock();
         try {
+            boolean versionChange = checkAndUpdateListVersions(
+                    sessionServerConfig.getSessionServerDataCenter(), nodeChangeResult.getVersion());
+            if (!versionChange) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Current data type {} list version has not updated!",
+                            getNodeType());
+                }
+            }
             nodes = nodeChangeResult.getNodes();
-            dataCenterNodesVersions.putIfAbsent(nodeChangeResult.getLocalDataCenter(),
-                nodeChangeResult.getVersion());
+            return versionChange;
         } finally {
             write.unlock();
         }

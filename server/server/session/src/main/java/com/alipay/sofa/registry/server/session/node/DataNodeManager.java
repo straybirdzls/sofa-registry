@@ -52,13 +52,15 @@ public class DataNodeManager extends AbstractNodeManager<DataNode> {
     }
 
     @Override
-    public void updateNodes(NodeChangeResult nodeChangeResult) {
+    public boolean updateNodes(NodeChangeResult nodeChangeResult) {
         write.lock();
         try {
-            super.updateNodes(nodeChangeResult);
-            consistentHash = new ConsistentHash(sessionServerConfig.getNumberOfReplicas(),
-                getDataCenterNodes());
-
+            boolean versionChange = super.updateNodes(nodeChangeResult);
+            if (versionChange) {
+                consistentHash = new ConsistentHash(sessionServerConfig.getNumberOfReplicas(),
+                        getDataCenterNodes());
+            }
+            return versionChange;
         } finally {
             write.unlock();
         }

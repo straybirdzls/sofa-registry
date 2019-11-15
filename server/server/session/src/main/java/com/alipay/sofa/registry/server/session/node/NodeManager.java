@@ -36,7 +36,7 @@ public interface NodeManager<T extends Node> {
 
     NodeType getNodeType();
 
-    void updateNodes(NodeChangeResult nodeChangeResult);
+    boolean updateNodes(NodeChangeResult nodeChangeResult);
 
     Collection<String> getDataCenters();
 
