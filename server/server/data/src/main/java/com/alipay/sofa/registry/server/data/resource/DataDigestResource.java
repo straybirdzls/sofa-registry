@@ -194,10 +194,14 @@ public class DataDigestResource {
             if (dataNodes != null && !dataNodes.isEmpty()) {
 
                 dataNodes.forEach((ip, dataServerNode) -> {
-                    if (ip != null && !ip.equals(DataServerConfig.IP)) {
-                        Connection connection = dataServerNode.getConnection();
-                        if (connection != null && connection.isFine()) {
-                            list.add(connection.getRemoteIP());
+                    if (ip != null) {
+                        if (!ip.equals(DataServerConfig.IP)) {
+                            Connection connection = dataServerNode.getConnection();
+                            if (connection != null && connection.isFine()) {
+                                list.add(connection.getRemoteIP());
+                            }
+                        } else {
+                            list.add(DataServerConfig.IP);
                         }
                     }
                 });
