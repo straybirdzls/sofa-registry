@@ -171,12 +171,12 @@ public class ExecutorManager {
             getOtherDataCenterChangeExecutor.shutdown();
         }
 
-        if (checkNodeListChangePushExecutor != null) {
-            checkNodeListChangePushExecutor.isShutdown();
+        if (checkNodeListChangePushExecutor != null && !checkNodeListChangePushExecutor.isShutdown()) {
+            checkNodeListChangePushExecutor.shutdown();
         }
 
-        if (raftClientRefreshExecutor != null) {
-            raftClientRefreshExecutor.isShutdown();
+        if (raftClientRefreshExecutor != null && !raftClientRefreshExecutor.isShutdown()) {
+            raftClientRefreshExecutor.shutdown();
         }
     }
 }
